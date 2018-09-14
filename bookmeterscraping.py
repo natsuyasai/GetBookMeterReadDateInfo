@@ -10,8 +10,8 @@
 import lxml.html
 import sys
 from typing import List
-from BookMeterCrawling import BookMeterCrawling
-from DebugPrint import DebugPrint
+from bookmetercrawling import BookMeterCrawling
+from debugprint import DebugPrint
 #********************************
 
 # const *************************
@@ -49,12 +49,15 @@ class BookMeterScraping:
         maxPage = self.crawler.getPageMax()
         # 全ページ分取得
         htmlPageData:List[lxml.html.HtmlElement] = []
-        #for page in range(1, int(maxPage)+1, 1):
+        for page in range(1, int(maxPage)+1, 1):
+            htmlPageData.append(self.crawler.execCrawling(page))
+        #for page in range(1, 3, 1):
         #    htmlPageData.append(self.crawler.execCrawling(page))
-        htmlPageData.append(self.crawler.execCrawling(1))
 
         # 解析実施
-        return self.__parseBookInfo(htmlPageData)
+        bookInfoList:List[BookInfo] = []
+        bookInfoList.extend(self.__parseBookInfo(htmlPageData))
+        return bookInfoList
 
 
     def __parseBookInfo(self, htmlList: List[lxml.html.HtmlElement]) -> List[BookInfo]:
@@ -69,13 +72,14 @@ class BookMeterScraping:
             # book__detail取得
             # TODO:1冊分取得したいけど，全要素分取れちゃう・・・
             bookDetailList = htmlInfo.xpath("//div[@class='book__detail']")
-            # 一冊分解析
-            bookInfoList = self.__parseOnePageBookDetail(bookDetailList[0])
+            #for bookDetail in bookDetailList:
+            # 一ページ分解析
+            bookInfoList.extend(self.__parseOnePageBookDetail(bookDetailList[0]))
         return bookInfoList
 
 
     def __parseOnePageBookDetail(self, bookDetail: lxml.html.HtmlElement) -> List[BookInfo]:
-        """ 本情報詳細一冊単位解析  
+        """ 本情報詳細一ページ解析  
         [I] bookDetail 本詳細情報  
         [O] 解析結果(BookInfo)
         """
@@ -85,12 +89,18 @@ class BookMeterScraping:
         titles = bookDetail.xpath("//div[@class='detail__title']/a")
         authors = bookDetail.xpath("//ul[@class='detail__authors']/li/a")
         pages = bookDetail.xpath("//div[@class='detail__page']")
+        # タイトルのデータ数が必ずMAXと考えられるため，タイトルのリスト数でループさせる
         for data in range(0, len(titles), 1):
             bookInf = BookInfo()
+            # タイトル
             bookInf.title = titles[data].text_content().encode("utf-8").decode("utf-8")
+            # 本の登録ID
             bookInf.id = titles[data].attrib['href'].split('/')[2]
+            # 登録日
             bookInf.registDate = dates[data].text_content().encode("utf-8").decode("utf-8")
+            # 著者
             bookInf.author = authors[data].text_content().encode("utf-8").decode("utf-8")
+            # ページ数
             bookInf.page = pages[data].text_content().encode("utf-8").decode("utf-8")
             bookInfoList.append(bookInf)
         return bookInfoList
@@ -101,5 +111,5 @@ class BookMeterScraping:
 if __name__ == "__main__":
     DebugPrint.setLogLevel(DebugPrint.LogLevel.Debug)
     scraping = BookMeterScraping('577685')
-    scraping.execScraping()
+    rslt = scraping.execScraping()
     pass

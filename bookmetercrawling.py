@@ -13,7 +13,7 @@ import lxml.html
 import sys
 import time
 
-from DebugPrint import DebugPrint
+from debugprint import DebugPrint
 #********************************
 
 # const *************************

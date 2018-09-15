@@ -11,23 +11,19 @@ import sys
 from bookmetercrawling import BookMeterCrawling
 from bookmeterscraping import BookMeterScraping
 from bookmeterscraping import BookInfo
+from dataanalyzer import DataAnalyzer
 from debugprint import DebugPrint
 #********************************
 
 # エントリポイント
 def main(args : str):
-    # 解析実行
+    # データ取得
     scraping = BookMeterScraping(args)
     bookInfoList = scraping.execScraping()
-    for info in bookInfoList:
-        print(info.title)
-        print(info.author)
-        print(info.registDate)
-        print(info.page)
-        print(info.id)
-        
-    pass
-
+    # 解析実行
+    analyzer = DataAnalyzer(bookInfoList)
+    # csv出力
+    analyzer.outputCSV()
 
 # 実行
 if __name__ == "__main__":

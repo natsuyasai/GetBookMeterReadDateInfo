@@ -37,7 +37,7 @@ class BookMeterScraping:
         [I] userID ユーザID  
         """
         # クローリング用
-        self.crawler = BookMeterCrawling(userID)
+        self.__crawler = BookMeterCrawling(userID)
 
 
     def execScraping(self) -> List[BookInfo]:
@@ -46,11 +46,11 @@ class BookMeterScraping:
         """
         DebugPrint.TPrint(str(sys._getframe().f_code.co_name))
         # 最大ページ数取得
-        maxPage = self.crawler.getPageMax()
+        maxPage = self.__crawler.getPageMax()
         # 全ページ分取得
         htmlPageData:List[lxml.html.HtmlElement] = []
         for page in range(1, int(maxPage)+1, 1):
-            htmlPageData.append(self.crawler.execCrawling(page))
+            htmlPageData.append(self.__crawler.execCrawling(page))
         #for page in range(1, 3, 1):
         #    htmlPageData.append(self.crawler.execCrawling(page))
 

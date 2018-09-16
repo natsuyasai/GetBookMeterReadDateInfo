@@ -10,6 +10,8 @@ import sys
 import enum
 #********************************
 
+# funcname : str(sys._getframe().f_code.co_name)
+
 class DebugPrint:
     # ログ種別
     class LogLevel(enum.IntEnum):

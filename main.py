@@ -18,15 +18,20 @@ from debugprint import DebugPrint
 # エントリポイント
 def main(args : str):
     # データ取得
-    scraping = BookMeterScraping(args)
+    scraping = BookMeterScraping(args[1])
     bookInfoList = scraping.execScraping()
     # 解析実行
-    analyzer = DataAnalyzer(bookInfoList)
+    analyzer = DataAnalyzer(bookInfoList, args[1])
     # csv出力
     analyzer.outputCSV()
+    # グラフ表示
+    analyzer.protBarGraph()
 
 # 実行
 if __name__ == "__main__":
     DebugPrint.setLogLevel(DebugPrint.LogLevel.Debug)
-    args = sys.argv
-    main('577685')
+    #args = sys.argv
+    args = []
+    args.append('')
+    args.append('577685')
+    main(args)

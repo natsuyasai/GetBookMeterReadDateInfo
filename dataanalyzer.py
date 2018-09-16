@@ -12,6 +12,10 @@ from typing import List
 from debugprint import DebugPrint
 import datetime
 import sys
+import numpy
+import matplotlib.pyplot as pyplot
+import matplotlib.font_manager as plotfont
+
 #********************************
 
 # const *************************
@@ -19,18 +23,23 @@ import sys
 
 
 class DataAnalyzer:
-    def __init__(self, bookInfoList: List[BookInfo]):
+    def __init__(self, bookInfoList: List[BookInfo], userID: str):
         """ コンストラクタ  
         [I] 解析対象データ
         """
+        # 読了本リスト
         self.__bookInfoList = bookInfoList
+        # 読了月ごとの冊数
+        self.__dateCntDict = self.__createAnalysisAuxiliaryInfo()
+        # ユーザID
+        self.__userID = userID
 
 
     def outputCSV(self):
         """ csv出力
         """
-        dateCntList = self.__createAnalysisAuxiliaryInfo()
-        with open('result.csv', 'a', encoding='utf-8_sig') as csvFile:
+        filename = self.__userID + '.csv'
+        with open(filename, 'a', encoding='utf-8_sig') as csvFile:
             csvFile.write('タイトル,著者名,登録日,年月,冊数,ページ数,ID\n')
             for info in self.__bookInfoList:
                 key = self.__createYMKey(info.registDate)
@@ -39,7 +48,7 @@ class DataAnalyzer:
                     '"'+ info.author + '",' 
                     + info.registDate + ',' 
                     + key + ','
-                    + str(dateCntList[key]) + ','
+                    + str(self.__dateCntDict[key]) + ','
                     + info.page + ','
                     + info.id + '\n')
 
@@ -48,8 +57,38 @@ class DataAnalyzer:
     def protBarGraph(self):
         """ 棒グラフプロット
         """
-        pass
-        
+        # dictのkey/valueをそれぞれlistに変換
+        bookNumList = []
+        dateList = []
+        for num in self.__dateCntDict:
+            bookNumList.append(self.__dateCntDict[num])
+            dateList.append(num)
+        # 順番が最新順なので逆順にする
+        bookNumList.reverse()
+        dateList.reverse()
+        for i in range(0,4,1):
+            del bookNumList[0]
+            del dateList[0]
+
+
+        # リストからnumpyのarrayに変換
+        height = numpy.array(bookNumList)
+        left = numpy.array(dateList)
+
+        # グラフデータ設定
+        pyplot.tight_layout()
+        pyplot.figure()
+        pyplot.title('The number of books which I read')
+        pyplot.xlabel('Month')
+        pyplot.ylabel('Number of books')
+        pyplot.bar(x=left, height=height, align='center')
+        pyplot.grid(color='gray', linestyle='dotted')
+        pyplot.xticks(range(len(left)), left,rotation=90)
+        filename = self.__userID + '.png'
+        pyplot.savefig(filename, format = 'png', dpi=500, bbox_inches='tight')
+        #pyplot.show()
+         
+
 
     def __createDateCntList(self) -> dict:
         """ 月ごとの冊数カウント

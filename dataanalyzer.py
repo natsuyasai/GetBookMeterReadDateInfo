@@ -66,6 +66,9 @@ class DataAnalyzer:
         # 順番が最新順なので逆順にする
         bookNumList.reverse()
         dateList.reverse()
+        for i in range(0,3,1):
+            del bookNumList[0]
+            del dateList[0]
 
 
 

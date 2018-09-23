@@ -148,7 +148,8 @@ class DataAnalyzer:
         key =  self.__createYMKey(prvDate)
         dateCntInfo[key] = prvMonthCnt
         # 日付不明は0とする
-        dateCntInfo['日付不明'] = 0
+        if '日付不明' in dateCntDict:
+            dateCntInfo['日付不明'] = 0
         return dateCntInfo
 
 

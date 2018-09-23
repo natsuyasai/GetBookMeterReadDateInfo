@@ -40,19 +40,22 @@ class DataAnalyzer:
     def outputCSV(self):
         """ csv出力
         """
+        # 文字列生成
+        writeStr = 'タイトル,著者名,登録日,年月,冊数,ページ数,本詳細ページ\n'
+        for info in self.__bookInfoList:
+            key = self.__createYMKey(info.registDate)
+            writeStr +=\
+                '"' + info.title + '",'\
+                '"'+ info.author + '",' \
+                + info.registDate + ',' \
+                + key + ','\
+                + str(self.__dateCntDict.get(key,0)) + ','\
+                + info.page + ','\
+                + BOOK_INFO_URL + info.id + '\n'\
+        # ファイルへ書き込み
         filename = self.__userID + '.csv'
-        with open(filename, 'a', encoding='utf-8_sig') as csvFile:
-            csvFile.write('タイトル,著者名,登録日,年月,冊数,ページ数,本詳細ページ\n')
-            for info in self.__bookInfoList:
-                key = self.__createYMKey(info.registDate)
-                csvFile.write(
-                    '"' + info.title + '",'
-                    '"'+ info.author + '",' 
-                    + info.registDate + ',' 
-                    + key + ','
-                    + str(self.__dateCntDict.get(key,0)) + ','
-                    + info.page + ','
-                    + BOOK_INFO_URL + info.id + '\n')
+        with open(filename, 'w', encoding='utf-8_sig') as csvFile:
+            csvFile.write(writeStr)
 
 
 

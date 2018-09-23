@@ -15,8 +15,7 @@ from debugprint import DebugPrint
 #********************************
 
 # const *************************
-# 本詳細ページURL
-BOOK_INFO_URL='https://bookmeter.com/books/'
+
 #********************************
 
 # struct ************************

@@ -19,6 +19,8 @@ import matplotlib.font_manager as plotfont
 #********************************
 
 # const *************************
+# 本詳細ページURL
+BOOK_INFO_URL='https://bookmeter.com/books/'
 #********************************
 
 
@@ -40,7 +42,7 @@ class DataAnalyzer:
         """
         filename = self.__userID + '.csv'
         with open(filename, 'a', encoding='utf-8_sig') as csvFile:
-            csvFile.write('タイトル,著者名,登録日,年月,冊数,ページ数,ID\n')
+            csvFile.write('タイトル,著者名,登録日,年月,冊数,ページ数,本詳細ページ\n')
             for info in self.__bookInfoList:
                 key = self.__createYMKey(info.registDate)
                 csvFile.write(
@@ -50,7 +52,7 @@ class DataAnalyzer:
                     + key + ','
                     + str(self.__dateCntDict[key]) + ','
                     + info.page + ','
-                    + info.id + '\n')
+                    + BOOK_INFO_URL + info.id + '\n')
 
 
 
@@ -81,7 +83,7 @@ class DataAnalyzer:
         pyplot.figure()
         pyplot.title('The number of books which I read')
         pyplot.xlabel('Month')
-        pyplot.ylabel('Number of books')
+        pyplot.ylabel('The Number of books')
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
         pyplot.xticks(range(len(left)), left,rotation=90)

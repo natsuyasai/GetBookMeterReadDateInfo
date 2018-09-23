@@ -50,7 +50,7 @@ class DataAnalyzer:
                     '"'+ info.author + '",' 
                     + info.registDate + ',' 
                     + key + ','
-                    + str(self.__dateCntDict[key]) + ','
+                    + str(self.__dateCntDict.get(key,0)) + ','
                     + info.page + ','
                     + BOOK_INFO_URL + info.id + '\n')
 
@@ -68,9 +68,12 @@ class DataAnalyzer:
         # 順番が最新順なので逆順にする
         bookNumList.reverse()
         dateList.reverse()
-        for i in range(0,3,1):
-            del bookNumList[0]
-            del dateList[0]
+        # 自分用デバッグコード(初登録時のデータを除外)
+        if self.__userID == '577685':
+            for i in range(0,3,1):
+                del bookNumList[0]
+                del dateList[0]
+
 
 
 
@@ -141,6 +144,10 @@ class DataAnalyzer:
             # 今回値を保持
             prvMonthCnt = dateCntDict[dateStr]
             prvDate = dateStr
+        # 最終データを保持
+        key =  self.__createYMKey(prvDate)
+        dateCntInfo[key] = prvMonthCnt
+        # 日付不明は0とする
         dateCntInfo['日付不明'] = 0
         return dateCntInfo
 

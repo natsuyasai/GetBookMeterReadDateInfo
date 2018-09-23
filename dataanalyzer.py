@@ -59,8 +59,8 @@ class DataAnalyzer:
 
 
 
-    def protBarGraph(self):
-        """ 棒グラフプロット
+    def protBarGraphForMonthReads(self):
+        """ 月別読書量棒グラフプロット
         """
         # dictのkey/valueをそれぞれlistに変換
         bookNumList = []
@@ -77,9 +77,6 @@ class DataAnalyzer:
                 del bookNumList[0]
                 del dateList[0]
 
-
-
-
         # リストからnumpyのarrayに変換
         height = numpy.array(bookNumList)
         left = numpy.array(dateList)
@@ -92,6 +89,7 @@ class DataAnalyzer:
         pyplot.ylabel('The Number of books')
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
+        pyplot.minorticks_on()
         pyplot.xticks(range(len(left)), left,rotation=90)
         filename = self.__userID + '.png'
         pyplot.savefig(filename, format = 'png', dpi=500, bbox_inches='tight')

@@ -24,8 +24,8 @@ def main(args : str):
     analyzer = DataAnalyzer(bookInfoList, args[1])
     # csv出力
     analyzer.outputCSV()
-    # グラフ表示
-    analyzer.protBarGraph()
+    # 月別読書量グラフ表示
+    analyzer.protBarGraphForMonthReads()
 
 # 実行
 if __name__ == "__main__":

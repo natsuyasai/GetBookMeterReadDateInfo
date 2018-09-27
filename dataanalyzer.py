@@ -15,7 +15,7 @@ import sys
 import numpy
 import matplotlib.pyplot as pyplot
 import matplotlib.font_manager as plotfont
-
+from matplotlib.font_manager import FontProperties
 #********************************
 
 # const *************************
@@ -82,16 +82,28 @@ class DataAnalyzer:
         left = numpy.array(dateList)
 
         # グラフデータ設定
+        filename = self.__userID + '.png'
+        self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
+
+    
+    def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title:str,  filename: str):
+        """ 棒グラフ生成
+        [I] left X軸
+        [I] height Y軸
+        [I] filename ファイル名
+        """
+        # フォント設定
+        fontprop = FontProperties(fname='./font/NotoSansCJKjp-Medium.otf', size=10)
+        # グラフデータ設定
         pyplot.tight_layout()
         pyplot.figure()
-        pyplot.title('The number of books which I read')
-        pyplot.xlabel('Month')
-        pyplot.ylabel('The Number of books')
+        pyplot.title(title, font_properties=fontprop)
+        pyplot.xlabel(xlabel, font_properties=fontprop)
+        pyplot.ylabel(ylabel, font_properties=fontprop)
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
         pyplot.minorticks_on()
         pyplot.xticks(range(len(left)), left,rotation=90)
-        filename = self.__userID + '.png'
         pyplot.savefig(filename, format = 'png', dpi=500, bbox_inches='tight')
         #pyplot.show()
          

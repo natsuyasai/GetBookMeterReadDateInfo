@@ -93,7 +93,9 @@ class DataAnalyzer:
         [I] filename ファイル名
         """
         # フォント設定
-        fontprop = FontProperties(fname='./font/NotoSansCJKjp-Medium.otf', size=10)
+        import os
+        path = os.path.dirname(os.path.abspath(__file__))
+        fontprop = FontProperties(fname=path + '/font/NotoSansCJKjp-Medium.otf', size=10)
         # グラフデータ設定
         pyplot.tight_layout()
         pyplot.figure()

@@ -98,7 +98,9 @@ class DataAnalyzer:
         fontprop = FontProperties(fname=path + '/font/NotoSansCJKjp-Medium.otf', size=10)
         # グラフデータ設定
         pyplot.tight_layout()
-        pyplot.figure()
+        sizeX = len(left)*4/10
+        sizeY = len(height)*2/10
+        pyplot.figure(dpi=100, figsize=(sizeX, sizeY))
         pyplot.title(title, font_properties=fontprop)
         pyplot.xlabel(xlabel, font_properties=fontprop)
         pyplot.ylabel(ylabel, font_properties=fontprop)

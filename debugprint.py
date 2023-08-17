@@ -6,11 +6,11 @@
 """
 
 # import ************************
-import sys
 import enum
-#********************************
+# ********************************
 
 # funcname : str(sys._getframe().f_code.co_name)
+
 
 class DebugPrint:
     # ログ種別
@@ -19,7 +19,6 @@ class DebugPrint:
         Trace = 1
         Debug = 2
 
-    
     # ログレベル
     LOG_LEVEL = LogLevel.Error
 
@@ -40,16 +39,14 @@ class DebugPrint:
         if DebugPrint.LOG_LEVEL >= DebugPrint.LogLevel.Error:
             print(funcStr + ' : ' + logStr)
 
-    
     # トレースログ
     @staticmethod
     def TPrint(funcStr: str):
         if DebugPrint.LOG_LEVEL >= DebugPrint.LogLevel.Trace:
             print(funcStr)
 
-
     # ログレベル設定
     @staticmethod
-    def setLogLevel(logLevel : LogLevel):
+    def setLogLevel(logLevel: LogLevel):
         DebugPrint.LOG_LEVEL = logLevel
             

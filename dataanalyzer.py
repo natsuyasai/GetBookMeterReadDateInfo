@@ -14,14 +14,13 @@ import datetime
 import sys
 import numpy
 import matplotlib.pyplot as pyplot
-import matplotlib.font_manager as plotfont
 from matplotlib.font_manager import FontProperties
-#********************************
+# ********************************
 
 # const *************************
 # 本詳細ページURL
-BOOK_INFO_URL='https://bookmeter.com/books/'
-#********************************
+BOOK_INFO_URL = 'https://bookmeter.com/books/'
+# ********************************
 
 
 class DataAnalyzer:
@@ -36,7 +35,6 @@ class DataAnalyzer:
         # ユーザID
         self.__userID = userID
 
-
     def outputCSV(self):
         """ csv出力
         """
@@ -46,18 +44,17 @@ class DataAnalyzer:
             key = self.__createYMKey(info.registDate)
             writeStr +=\
                 '"' + info.title + '",'\
-                '"'+ info.author + '",' \
+                '"' + info.author + '",' \
                 + info.registDate + ',' \
                 + key + ','\
-                + str(self.__dateCntDict.get(key,0)) + ','\
+                + str(self.__dateCntDict.get(key, 0)) + ','\
                 + info.page + ','\
                 + BOOK_INFO_URL + info.id + '\n'\
+
         # ファイルへ書き込み
         filename = self.__userID + '.csv'
         with open(filename, 'w', encoding='utf-8_sig') as csvFile:
             csvFile.write(writeStr)
-
-
 
     def protBarGraphForMonthReads(self):
         """ 月別読書量棒グラフプロット
@@ -73,7 +70,7 @@ class DataAnalyzer:
         dateList.reverse()
         # 自分用デバッグコード(初登録時のデータを除外)
         if self.__userID == '577685':
-            for i in range(0,3,1):
+            for i in range(0, 3, 1):
                 del bookNumList[0]
                 del dateList[0]
 
@@ -85,8 +82,7 @@ class DataAnalyzer:
         filename = self.__userID + '.png'
         self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
 
-    
-    def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title:str,  filename: str):
+    def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title: str,  filename: str):
         """ 棒グラフ生成
         [I] left X軸
         [I] height Y軸
@@ -107,11 +103,8 @@ class DataAnalyzer:
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
         pyplot.minorticks_on()
-        pyplot.xticks(range(len(left)), left,rotation=90)
-        pyplot.savefig(filename, format = 'png', dpi=500, bbox_inches='tight')
-        #pyplot.show()
-         
-
+        pyplot.xticks(range(len(left)), left, rotation=90)
+        pyplot.savefig(filename, format='png', dpi=500, bbox_inches='tight')
 
     def __createDateCntList(self) -> dict:
         """ 月ごとの冊数カウント
@@ -137,7 +130,6 @@ class DataAnalyzer:
             cnt += 1
         return cntDict
 
-    
     def __createAnalysisAuxiliaryInfo(self) -> dict:
         """ 解析補助情報生成
         [O] 解析補助情報
@@ -151,9 +143,9 @@ class DataAnalyzer:
         for dateStr in dateCntDict:
             # 今回データが前回値以下なら月が切り替わっているためカウント値を登録する
             if prvMonthCnt >= dateCntDict[dateStr]:
-                if prvDate != '日付不明' and prvDate != '': # 初回は飛ばす
+                if prvDate != '日付不明' and prvDate != '':  # 初回は飛ばす
                     # 日付不明でなければ，年月をキーとして，その月の冊数を保持する
-                    key =  self.__createYMKey(prvDate)
+                    key = self.__createYMKey(prvDate)
                     dateCntInfo[key] = prvMonthCnt
                     DebugPrint.DPrint(str(sys._getframe().f_code.co_name), key)
                 else:
@@ -162,15 +154,13 @@ class DataAnalyzer:
             prvMonthCnt = dateCntDict[dateStr]
             prvDate = dateStr
         # 最終データを保持
-        key =  self.__createYMKey(prvDate)
+        key = self.__createYMKey(prvDate)
         dateCntInfo[key] = prvMonthCnt
         # 日付不明は0とする
         if '日付不明' in dateCntDict:
             dateCntInfo['日付不明'] = 0
         return dateCntInfo
 
-
-    
     def __createYMKey(self, dateStr: str) -> str:
         """ 年月を組合せたキー用文字列生成
         [I] 日付文字列
@@ -183,8 +173,5 @@ class DataAnalyzer:
             return str(date.year) + '{:02d}'.format(date.month)
 
 
-
-
-# 実行
 if __name__ == "__main__":
     pass

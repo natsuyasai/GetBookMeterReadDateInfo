@@ -8,15 +8,13 @@
 
 # import*************************
 import sys
-from bookmetercrawling import BookMeterCrawling
 from bookmeterscraping import BookMeterScraping
-from bookmeterscraping import BookInfo
 from dataanalyzer import DataAnalyzer
-from debugprint import DebugPrint
-#********************************
+# ********************************
+
 
 # エントリポイント
-def main(args : str):
+def main(args: str):
     # データ取得
     scraping = BookMeterScraping(args[1])
     bookInfoList = scraping.execScraping()
@@ -27,11 +25,8 @@ def main(args : str):
     # 月別読書量グラフ表示
     analyzer.protBarGraphForMonthReads()
 
+
 # 実行
 if __name__ == "__main__":
-    DebugPrint.setLogLevel(DebugPrint.LogLevel.Debug)
-    #args = sys.argv
-    args = []
-    args.append('')
-    args.append('916192')
+    args = sys.argv
     main(args)

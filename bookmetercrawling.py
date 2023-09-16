@@ -44,9 +44,9 @@ class BookMeterCrawling:
         DebugPrint.TPrint(str(sys._getframe().f_code.co_name))
         # URL生成
         userURL = BOOK_METER_USER_URL_BGN
-        + self.__userID
-        + BOOK_METER_USER_URL_END
-        + str(page)
+        userURL += self.__userID
+        userURL += BOOK_METER_USER_URL_END
+        userURL += str(page)
 
         # データ取得
         requestResult = requests.get(userURL, headers=self.__createRequestHeader())

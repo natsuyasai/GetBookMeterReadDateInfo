@@ -14,7 +14,7 @@ from dataanalyzer import DataAnalyzer
 
 
 # エントリポイント
-def main(args: str):
+def main(args: list):
     # データ取得
     scraping = BookMeterScraping(args[1])
     bookInfoList = scraping.execScraping()

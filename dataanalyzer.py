@@ -35,6 +35,8 @@ class DataAnalyzer:
         # ユーザID
         self.__userID = userID
 
+        self.__nowDate = datetime.datetime.now()
+
     def outputCSV(self):
         """ csv出力
         """
@@ -56,23 +58,21 @@ class DataAnalyzer:
         with open(filename, 'w', encoding='utf-8_sig') as csvFile:
             csvFile.write(writeStr)
 
-    def protBarGraphForMonthReads(self):
+    def protBarGraphForMonthReads(self, targetYear: str):
         """ 月別読書量棒グラフプロット
+        [I] targetYear 出力対象の年(空文字またはNullなら全期間出力)
         """
         # dictのkey/valueをそれぞれlistに変換
         bookNumList = []
         dateList = []
-        for num in self.__dateCntDict:
-            bookNumList.append(self.__dateCntDict[num])
-            dateList.append(num)
+        for yearAndMonth in self.__dateCntDict:
+            if len(targetYear) > 0 and (not self.__isTargetYear(yearAndMonth, targetYear)):
+                continue
+            bookNumList.append(self.__dateCntDict[yearAndMonth])
+            dateList.append(yearAndMonth)
         # 順番が最新順なので逆順にする
         bookNumList.reverse()
         dateList.reverse()
-        # 自分用デバッグコード(初登録時のデータを除外)
-        if self.__userID == '577685':
-            for i in range(0, 3, 1):
-                del bookNumList[0]
-                del dateList[0]
 
         # リストからnumpyのarrayに変換
         height = numpy.array(bookNumList)
@@ -81,6 +81,19 @@ class DataAnalyzer:
         # グラフデータ設定
         filename = self.__userID + '.png'
         self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
+
+    def __isTargetYear(self, dataYearAndManth: str, targetYear: str) -> bool:
+        """ 対象の年か
+        [I] dataYearAndManth 対象データの文字(yyyyMM)
+        [I] targetYear 出力対象の年
+        """
+        # targetYearAndManthには年と月を結合した文字列または日付不明がくる
+        # そのため単純な数字の比較とするため、yyyyMMの6桁の数字としておく
+        if not str.isdecimal(dataYearAndManth) or not str.isdecimal(targetYear):
+            return False
+        dataNum = int(dataYearAndManth)
+        targetNum = int(targetYear) * 100
+        return dataNum >= targetNum
 
     def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title: str,  filename: str):
         """ 棒グラフ生成

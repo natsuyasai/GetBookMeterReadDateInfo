@@ -3,3 +3,5 @@ venv_centos
 venv
 .venv
 .vscode
+.csv
+.png
